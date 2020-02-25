@@ -4,7 +4,7 @@ import cors from "cors";
 import bp from "body-parser";
 import DbContext from "./db/dbConfig";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 //NOTE next we need to create our server
 let server = express();
@@ -13,7 +13,7 @@ let server = express();
 DbContext.connect();
 
 //NOTE Creates a reference to the build project on the client (if api only remove this line)
-server.use(express.static(__dirname + "/../dist"));
+server.use(express.static(__dirname + "/../client"));
 
 //NOTE Allows requests from the port 8080, add additional addresses as needed
 let whitelist = ["http://localhost:8080"];
@@ -46,15 +46,16 @@ server.use("/api/bugs", new BugController().router);
 //NOTE Everything below this line always stays the same
 
 // NOTE DO NOT touch! This is for testing only
-import cleanupService from "./utils/CleanupService";
-server.get('/cleanup', async (req, res, next) => {
-  try {
-    let data = await cleanupService.cleanupAsync()
-    res.send(data)
-  } catch (e) {
-    next(e)
-  }
-})
+
+// import cleanupService from "./utils/CleanupService";
+// server.get('/cleanup', async (req, res, next) => {
+//   try {
+//     let data = await cleanupService.cleanupAsync()
+//     res.send(data)
+//   } catch (e) {
+//     next(e)
+//   }
+// })
 
 //NOTE Default error handler, catches all routes with an error attached
 server.use((error, req, res, next) => {
